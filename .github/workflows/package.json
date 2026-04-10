@@ -1,0 +1,20 @@
+{
+  "name": "trenches-agent",
+  "version": "1.0.0",
+  "private": true,
+  "bin": "trenches-agent.js",
+  "pkg": {
+    "targets": [
+      "node18-win-x64"
+    ],
+    "outputPath": ".",
+    "assets": [
+      "core/**/*",
+      "config/**/*",
+      "data/**/*"
+    ]
+  },
+  "devDependencies": {
+    "pkg": "^5.8.1"
+  }
+}

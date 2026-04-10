@@ -1,0 +1,7 @@
+{
+  "name": "trenches-agent",
+  "private": true,
+  "dependencies": {
+    "better-sqlite3": "^12.8.0"
+  }
+}
