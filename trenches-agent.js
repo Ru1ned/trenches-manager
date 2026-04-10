@@ -45,7 +45,6 @@ const OFFLINE_MODE = true;
 const ELECTRON_MANAGED = process.env.ELECTRON_MANAGED === 'true';
 
 // CRITICAL: require path and fs at TOP LEVEL before anything else uses them
-const path = require('path');
 const fs = require('fs');
 const Module = require('module');
 const migrationHandler = require('./core/migrationHandler');
