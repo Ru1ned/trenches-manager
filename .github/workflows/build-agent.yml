@@ -24,11 +24,17 @@ jobs:
         with:
           python-version: '3.x'
 
-      # 🔧 Install dependencies with native build
-      - name: Install dependencies (force native build)
-        run: npm install --build-from-source
+      # 🔥 FORCE native modules to build (this is the key fix)
+      - name: Install dependencies (force rebuild)
+        run: |
+          npm config set build_from_source true
+          npm install
 
-      # 🔍 Verify native binary exists (PowerShell-safe)
+      # 🔍 Debug step (see if folder exists at all)
+      - name: Debug better-sqlite3 folder
+        run: dir node_modules\better-sqlite3
+
+      # 🔍 Verify native binary exists
       - name: Verify better-sqlite3 binary
         run: |
           if (!(Test-Path "node_modules/better-sqlite3/build/Release/better_sqlite3.node")) {
