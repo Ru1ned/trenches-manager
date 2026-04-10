@@ -18,26 +18,27 @@ jobs:
         with:
           node-version: 18
 
-      # 🐍 Install Python (required for node-gyp)
+      # 🐍 Required for native modules
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
-      # 🔥 FORCE native modules to build (this is the key fix)
-      - name: Install dependencies (force rebuild)
+      # 📦 Install root dependencies
+      - name: Install root dependencies
+        run: npm install
+
+      # 📦 Install core dependencies (THIS BUILDS better-sqlite3)
+      - name: Install core dependencies
         run: |
+          cd core
           npm config set build_from_source true
           npm install
 
-      # 🔍 Debug step (see if folder exists at all)
-      - name: Debug better-sqlite3 folder
-        run: dir node_modules\better-sqlite3
-
-      # 🔍 Verify native binary exists
+      # 🔍 Verify native binary exists (from core)
       - name: Verify better-sqlite3 binary
         run: |
-          if (!(Test-Path "node_modules/better-sqlite3/build/Release/better_sqlite3.node")) {
+          if (!(Test-Path "core/node_modules/better-sqlite3/build/Release/better_sqlite3.node")) {
             Write-Host "ERROR: better-sqlite3 binary missing!"
             exit 1
           }
@@ -52,10 +53,10 @@ jobs:
           mkdir TrenchesAgent
           move TrenchesAgent.exe TrenchesAgent\
 
-          mkdir TrenchesAgent\node_modules\better-sqlite3\build\Release
+          mkdir TrenchesAgent\core\node_modules\better-sqlite3\build\Release
 
-          copy node_modules\better-sqlite3\build\Release\better_sqlite3.node `
-          TrenchesAgent\node_modules\better-sqlite3\build\Release\
+          copy core\node_modules\better-sqlite3\build\Release\better_sqlite3.node `
+          TrenchesAgent\core\node_modules\better-sqlite3\build\Release\
 
       # 🗜️ Zip package
       - name: Zip package
