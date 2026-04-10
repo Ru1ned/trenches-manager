@@ -1,0 +1,52 @@
+name: Build Trenches Agent
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      
+name: Checkout repo
+      uses: actions/checkout@v4,
+
+      
+name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18,
+
+      
+name: Install dependencies
+      run: npm install,
+
+      
+name: Install better-sqlite3 (Windows build)
+      run: npm install better-sqlite3@11.10.0,
+
+      
+name: Build EXE with pkg
+      run: npx pkg . --targets node18-win-x64 --output TrenchesAgent.exe,
+
+      
+name: Prepare package
+      run: |
+        mkdir TrenchesAgent
+        move TrenchesAgent.exe TrenchesAgent\
+        mkdir TrenchesAgent\node_modules\better-sqlite3\build\Release
+        copy node_modules\better-sqlite3\build\Release\better_sqlite3.node TrenchesAgent\node_modules\better-sqlite3\build\Release\,
+
+      
+name: Zip package
+      run: powershell Compress-Archive -Path TrenchesAgent -DestinationPath TrenchesAgent-win64.zip,
+
+      
+name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: TrenchesAgent-win64
+        path: TrenchesAgent-win64.zip
