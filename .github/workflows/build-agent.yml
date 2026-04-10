@@ -32,7 +32,6 @@ jobs:
       - name: Install core dependencies
         run: |
           cd core
-          npm config set build_from_source true
           npm install
 
       # 🔍 Verify native binary exists (from core)
@@ -45,7 +44,7 @@ jobs:
 
       # 📦 Build EXE
       - name: Build EXE
-        run: npx pkg trenches-agent.js . --targets node18-win-x64 --nobytecode --output TrenchesAgent.exe
+        run: npx pkg trenches-agent.js --targets node18-win-x64 --nobytecode --output TrenchesAgent.exe
 
       # 📁 Prepare final package
       - name: Prepare package
