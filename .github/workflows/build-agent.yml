@@ -45,7 +45,7 @@ jobs:
 
       # 📦 Build EXE
       - name: Build EXE
-        run: npx pkg . --targets node18-win-x64 --output TrenchesAgent.exe
+        run: npx pkg trenches-agent.js . --targets node18-win-x64 --nobytecode --output TrenchesAgent.exe
 
       # 📁 Prepare final package
       - name: Prepare package
