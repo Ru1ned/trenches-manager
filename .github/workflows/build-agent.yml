@@ -18,11 +18,17 @@ jobs:
         with:
           node-version: 18
 
-      # 🔥 Install + build native module properly
-      - name: Install dependencies (native build)
-        run: npm install --build-from-source=better-sqlite3
+      # 🐍 Install Python (required for node-gyp)
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
 
-      # 🔍 Verify binary exists (PowerShell FIXED)
+      # 🔧 Install dependencies with native build
+      - name: Install dependencies (force native build)
+        run: npm install --build-from-source
+
+      # 🔍 Verify native binary exists (PowerShell-safe)
       - name: Verify better-sqlite3 binary
         run: |
           if (!(Test-Path "node_modules/better-sqlite3/build/Release/better_sqlite3.node")) {
@@ -45,7 +51,7 @@ jobs:
           copy node_modules\better-sqlite3\build\Release\better_sqlite3.node `
           TrenchesAgent\node_modules\better-sqlite3\build\Release\
 
-      # 🗜️ Zip it
+      # 🗜️ Zip package
       - name: Zip package
         run: powershell Compress-Archive -Path TrenchesAgent -DestinationPath TrenchesAgent-win64.zip
 
