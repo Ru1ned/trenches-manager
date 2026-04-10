@@ -1,8 +1,0 @@
-{
-  "agent_id": "local-agent",
-  "agent_name": "Local Agent",
-  "plugin_api_token": "606d1a9a343af19e0d97a5be5ad1b12e84d782ad58cb1f2a20adafaf49a5bc19",
-  "supabase_url": "",
-  "supabase_anon_key": "",
-  "agent_key": ""
-}
