@@ -1,5 +1,21 @@
 #!/usr/bin/env node
-// Safety: define VERBOSE early in case any code references it before the main block
+
+const path = require("path");
+
+// 🔥 Fix better-sqlite3 when running as EXE
+if (process.pkg) {
+  process.env.BETTER_SQLITE3_BINDINGS = path.join(
+    path.dirname(process.execPath),
+    "core",
+    "node_modules",
+    "better-sqlite3",
+    "build",
+    "Release",
+    "better_sqlite3.node"
+  );
+}
+
+// Safety: define VERBOSE early...
 var VERBOSE = false;
 console.log('NEW BUILD LOADED - v59.0');
 console.log('[AGENT BOOT VERIFIED] trenches-agent.js loaded at', new Date().toISOString());
