@@ -18,23 +18,23 @@ jobs:
         with:
           node-version: 18
 
-      # 🔥 Build native module correctly
+      # 🔥 Install + build native module properly
       - name: Install dependencies (native build)
         run: npm install --build-from-source=better-sqlite3
 
-      # 🔍 Ensure binary exists (fail fast if not)
+      # 🔍 Verify binary exists (PowerShell FIXED)
       - name: Verify better-sqlite3 binary
         run: |
-          if not exist node_modules\better-sqlite3\build\Release\better_sqlite3.node (
-            echo "❌ better-sqlite3 binary missing!"
+          if (!(Test-Path "node_modules/better-sqlite3/build/Release/better_sqlite3.node")) {
+            Write-Host "ERROR: better-sqlite3 binary missing!"
             exit 1
-          )
+          }
 
-      # 📦 Build exe
+      # 📦 Build EXE
       - name: Build EXE
         run: npx pkg . --targets node18-win-x64 --output TrenchesAgent.exe
 
-      # 📁 Create runtime package
+      # 📁 Prepare final package
       - name: Prepare package
         run: |
           mkdir TrenchesAgent
@@ -42,14 +42,14 @@ jobs:
 
           mkdir TrenchesAgent\node_modules\better-sqlite3\build\Release
 
-          copy node_modules\better-sqlite3\build\Release\better_sqlite3.node ^
+          copy node_modules\better-sqlite3\build\Release\better_sqlite3.node `
           TrenchesAgent\node_modules\better-sqlite3\build\Release\
 
       # 🗜️ Zip it
       - name: Zip package
         run: powershell Compress-Archive -Path TrenchesAgent -DestinationPath TrenchesAgent-win64.zip
 
-      # ☁️ Upload
+      # ☁️ Upload artifact
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
