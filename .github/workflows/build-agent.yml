@@ -31,13 +31,13 @@ jobs:
       - name: Install root dependencies
         run: npm install
 
-      # 📦 Install core dependencies (THIS BUILDS better-sqlite3)
+      # 📦 Install core dependencies
       - name: Install core dependencies
         run: |
           cd core
           npm install
 
-      # 🔍 Verify native binary exists (from core)
+      # 🔍 Verify native binary exists
       - name: Verify better-sqlite3 binary
         run: |
           if (!(Test-Path "core/node_modules/better-sqlite3/build/Release/better_sqlite3.node")) {
@@ -64,9 +64,17 @@ jobs:
       - name: Zip package
         run: powershell Compress-Archive -Path TrenchesAgent -DestinationPath TrenchesAgent-win64.zip
 
-      # ☁️ Upload artifact
+      # 📤 Upload artifact
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: TrenchesAgent-win64
           path: TrenchesAgent-win64.zip
+
+      # 🚀 Upload to GitHub Release
+      - name: Upload to GitHub Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: TrenchesAgent-win64.zip
