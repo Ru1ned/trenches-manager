@@ -48,6 +48,17 @@ jobs:
             exit 1
           }
 
+      # 🔥 FIXED: Inject version from tag (NEW STEP, NOT NESTED)
+      - name: Inject version from tag
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}"
+          $version = $version -replace '^v', ''
+
+          (Get-Content trenches-agent.js) `
+            -replace 'AGENT_VERSION\s*=\s*".*?"', "AGENT_VERSION = `"$version`"" `
+            | Set-Content trenches-agent.js
+
       # 📦 Build EXE
       - name: Build EXE
         run: npx pkg trenches-agent.js --targets node18-win-x64 --nobytecode --output TrenchesAgent.exe
